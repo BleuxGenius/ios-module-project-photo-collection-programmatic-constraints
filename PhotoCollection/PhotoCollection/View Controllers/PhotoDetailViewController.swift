@@ -11,16 +11,27 @@ import Photos
 
 class PhotoDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+//    MARK: - PROPERTIES
+    
     var imageView: UIImageView!
     var titleTextField: UITextField!
     
-    var photo: Photo?
+//    update the view
+    var photo: Photo? {
+        didSet {
+            if isViewLoaded{
+                updateViews()
+            }
+        }
+    }
+    
     var photoController: PhotoController?
     var themeHelper: ThemeHelper?
     
+//    update the view 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setUpSubViews()
         setTheme()
         updateViews()
     }
@@ -38,8 +49,58 @@ class PhotoDetailViewController: UIViewController, UIImagePickerControllerDelega
     
     // MARK: - Private Methods
     
-    private func addImage() {
+    func setUpSubViews() {
+//         add UIImageView to viewController
+        let imageViewe = UIImageView()
+//        add subview
+        view.addSubview(imageView)
+//        turn auto restraints with the storeboard
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         
+//        MARK: - OUTLETS
+//        create outlets
+//        addButton to viewController. Buttons are usually type system to abide by basic ios rules
+        let button = UIButton(type: .system)
+//         set title of button
+        button.setTitle("Add Image", for: .normal)
+        button.addTarget(self, action: #selector(addImage), for: .touchUpInside)
+        view.addSubview(button)
+        button.translatesAutoresizingMaskIntoConstraints = false
+//        create outlets
+        let textField = UITextField()
+        textField.placeholder = "Give this photo a title"
+        view.addSubview(textField)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+    
+//    MARK: Programmactically Contrained
+        
+    NSLayoutConstraint.activate([
+        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+        imageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+        imageView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 10),
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1),
+        button.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+        button.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+        textField.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 10),
+        textField.centerXAnchor.constraint(equalTo:view.safeAreaLayoutGuide.centerXAnchor),
+        textField.widthAnchor.constraint(equalTo: imageView.widthAnchor)
+    ])
+//        create uibarbutton
+        
+        let barButtonItem = UIBarButtonItem()
+        barButtonItem.title = "Save Photo"
+        barButtonItem.target = self
+        barButtonItem.action = #selector(savePhoto)
+        
+        navigationItem.setRightBarButton(barButtonItem, animated: true)
+
+        imageView.image = UIImage(data: (photo?.imageData ?? nil)!)
+        self.titleTextField = textField
+        
+    }
+//    MARK: - METHODS
+    @objc private func addImage() {
+            
         let authorizationStatus = PHPhotoLibrary.authorizationStatus()
     
         switch authorizationStatus {
@@ -60,8 +121,8 @@ class PhotoDetailViewController: UIViewController, UIImagePickerControllerDelega
             break
         }
     }
-    
-    private func savePhoto() {
+//    MARK: - PRIVATE FUNCTIONS 
+    @objc private func savePhoto() {
         
         guard let image = imageView.image,
             let imageData = image.pngData(),

@@ -8,10 +8,14 @@
 
 import UIKit
 
-class PhotoCollectionViewController: UICollectionViewController {
+// implement teh delegation flow protocol
+class PhotoCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     let photoController = PhotoController()
     let themeHelper = ThemeHelper()
+    
+//     implement how many images on each row with be showing
+    var horizontalItems: CGFloat = 2
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -34,6 +38,24 @@ class PhotoCollectionViewController: UICollectionViewController {
         cell.photo = photo
         
         return cell
+    }
+//    implemnt section layout for collection view
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets()
+    }
+//     implement cell spacing method
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return(0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLAyout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let horizontralInsets = collectionView.contentInset.left +
+            collectionView.contentInset.right
+        let itemSpacing = (collectionViewLayout as!
+            UICollectionViewFlowLayout).minimumLineSpacing *
+            (horizontalItems - 1)
+        let width = (collectionView.frame.width - horizontralInsets - itemSpacing) / horizontalItems
+        return CGSize(width: width, height:  width * 1.2)
     }
     
     private func setTheme() {
