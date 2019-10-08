@@ -28,10 +28,16 @@ class PhotoDetailViewController: UIViewController, UIImagePickerControllerDelega
     var photoController: PhotoController?
     var themeHelper: ThemeHelper?
     
-//    update the view 
+//    update the view
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpSubViews()
+//        setTheme()
+//        updateViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setTheme()
         updateViews()
     }
@@ -51,7 +57,7 @@ class PhotoDetailViewController: UIViewController, UIImagePickerControllerDelega
     
     func setUpSubViews() {
 //         add UIImageView to viewController
-        let imageViewe = UIImageView()
+        let imageView = UIImageView()
 //        add subview
         view.addSubview(imageView)
 //        turn auto restraints with the storeboard
@@ -94,7 +100,7 @@ class PhotoDetailViewController: UIViewController, UIImagePickerControllerDelega
         
         navigationItem.setRightBarButton(barButtonItem, animated: true)
 
-        imageView.image = UIImage(data: (photo?.imageData ?? nil)!)
+        self.imageView = imageView
         self.titleTextField = textField
         
     }
