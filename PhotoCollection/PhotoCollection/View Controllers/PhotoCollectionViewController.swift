@@ -2,13 +2,13 @@
 //  PhotoCollectionViewController.swift
 //  PhotoCollection
 //
-//  Created by Spencer Curtis on 8/2/18.
+//  Created by Dani on 8/2/18.
 //  Copyright © 2018 Lambda School. All rights reserved.
 //
 
 import UIKit
 
-// implement teh delegation flow protocol
+// implement the delegation flow protocol
 class PhotoCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     let photoController = PhotoController()
@@ -57,7 +57,7 @@ class PhotoCollectionViewController: UICollectionViewController, UICollectionVie
         let width = (collectionView.frame.width - horizontralInsets - itemSpacing) / horizontalItems
         return CGSize(width: width, height:  width * 1.2)
     }
-    
+//    MARK: - Private Method
     private func setTheme() {
     
         guard let themePreference = themeHelper.themePreference else { return }
